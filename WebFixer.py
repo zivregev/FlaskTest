@@ -1,21 +1,26 @@
-from ScheduleFixer  import app
+from  flask import Flask
 from flask import make_response, request, Response
-from werkzeug.utils import secure_filename
 import ScheduleFixer.Fixer as fixer
 
-ALLOWED_EXTENSIONS = set(['ics'])
+app = Flask(__name__)
 
 @app.route('/')
 def form():
     return """
         <html>
             <body>
-                <h1>Correct HUJI medicine schedule</h1>
-
+                <h1>HUJI medicine schedule fixer</h1>
+                First, get your schedule file from the rishum-net. This is an *.ics file. You can find it when rishum is active, as described in the following images:
+                <br>
+                <img src="static/cal_tut_1.png">
+                <br>
+                <img src="static/cal_tut_2.png">
+                <br>
                 <form action="/fixSchedule" method="post" enctype="multipart/form-data">
-                    <input type="file" name="data_file" />
-                    <input type="string" name="year" />
-                    <input type="submit" />
+                    Now, upload the *.ics file here: <input type="file" name="data_file" />
+                    <br>
+                    Enter the school year (E.g., for 2018-19, write 2019) <input type="string" name="year" />
+                    <input type="submit" value="Fix"/>
                 </form>
             </body>
         </html>
