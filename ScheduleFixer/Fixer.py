@@ -88,7 +88,7 @@ def get_course_name_in_hebrew(course_number, year):
         return td.text
 
 
-def fix(file_contents, year):
+def fix(file_contents, year, hadassah_start_times):
     classes_by_course_number = {}
     course_names_in_hebrew = {}
     content = [line.decode(HEBREW_ENCODING).strip('\n') for line in file_contents]
@@ -105,6 +105,8 @@ def fix(file_contents, year):
                 if possible_class.is_possible_match(course_date, course_start_time):
                     content[i + 3] = content[i + 3].split(":")[0] + ":" + possible_class.type + " - " + \
                                      course_names_in_hebrew[course_number]
+                    if hadassah_start_times:
+                        content[i+1] = (content[i+1])[:-4] + "15" + (content[i+1])[-2:]
                     break
         except AttributeError:
             pass

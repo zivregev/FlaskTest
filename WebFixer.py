@@ -21,7 +21,10 @@ def form():
                 <form action="/fixSchedule" method="post" enctype="multipart/form-data">
                     Now, upload the *.ics file here: <input type="file" name="data_file" />
                     <br>
-                    Enter the school year (E.g., for 2018-19, write 2019) <input type="string" name="year" />
+                    Enter the school year (E.g., for 2018-19, write 2019) <input type="string" name="year" /> 
+                    <br>
+                    Use Hadassah-style (xx:15) start times? <input type="checkbox" name="hadassah_start_times"/> 
+                    <br>
                     <input type="submit" value="Fix"/>
                 </form>
                 <br>
@@ -39,12 +42,13 @@ def form():
 def transform_view():
     file = request.files['data_file']
     year = request.args.get('year')
+    hadassah_start_times = 'hadassah_start_times' in request.form
     if not file:
         return "No file"
 
     file_contents = file.stream.readlines()
 
-    result = fixer.fix(file_contents,year)
+    result = fixer.fix(file_contents, year, hadassah_start_times)
 
     generator = (line + '\n' for line in result)
 
